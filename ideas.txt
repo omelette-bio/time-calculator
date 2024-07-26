@@ -1,0 +1,12 @@
+ok donc idee de calculatrice de temps
+
+- faire une structure de donnes temps
+- faire le parseur avec pest.rs
+- faire des variables -> hashmap de donnees temps
+	-> instruction pour creer des variables "x = [temps]"
+
+- possibilite d'export le calcul en .json ?
+	-> donc aussi de load
+	-> export [nom de fichier]
+	-> load [nom de fichier]
+	-> exporte juste les variables et le contenu

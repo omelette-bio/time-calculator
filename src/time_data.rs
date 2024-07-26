@@ -1,5 +1,5 @@
 use std::fmt;
-use std::ops::Add;
+use std::ops::{Add, Sub};
 
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct TimeData {
@@ -33,27 +33,41 @@ impl TimeData {
     pub fn new(hours: usize, minutes: u8, seconds: u8, milliseconds: u16) -> Self {
         TimeData { hours, minutes, seconds, milliseconds }
     }
+
+    pub fn from_ms(milliseconds : usize) -> Self {
+        let mut rem = milliseconds;
+        let hours = rem / 3_600_000;
+        rem = rem % 3_600_000;
+
+        let minutes = (rem / 60_000) as u8;
+        rem = rem % 60_000;
+
+        let seconds = (rem / 1_000) as u8;
+        rem = rem % 1_000;
+
+        TimeData {
+            hours, minutes, seconds, milliseconds: rem as u16
+        }
+    }
+
+    pub fn to_ms(&self) -> usize {
+        self.milliseconds as usize + self.seconds as usize * 1_000 + self.minutes as usize * 60_000 + self.hours * 3_600_000
+    }
 }
 
 impl Add for TimeData {
     type Output = TimeData;
     fn add(self, rhs: TimeData) -> TimeData {
-        let tot_ms = self.milliseconds + rhs.milliseconds;
-        let ms = tot_ms % 1000;
+        TimeData::from_ms(self.to_ms() + rhs.to_ms())
+    }
+}
 
-        let tot_sec = self.seconds + rhs.seconds + (tot_ms / 1000) as u8;
-        let sec = tot_sec % 60;
-
-        let tot_min = self.minutes + rhs.minutes + (tot_sec / 60);
-        let min = tot_min % 60;
-
-        let hrs = self.hours + rhs.hours + (tot_min / 60) as usize;
-        
-        TimeData { 
-            hours: hrs,
-            minutes: min,
-            seconds: sec,
-            milliseconds: ms
+impl Sub for TimeData {
+    type Output = TimeData;
+    fn sub(self, rhs: TimeData) -> TimeData {
+        if self.to_ms() < rhs.to_ms() {
+            panic!("");
         }
+        TimeData::from_ms(self.to_ms() - rhs.to_ms())
     }
 }

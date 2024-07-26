@@ -4,10 +4,13 @@ use time_data::TimeData;
 
 fn main() {
     let t_d = TimeData::default();
-    let t_d1 = TimeData::new(0,1,31,99);
-    println!("{}", t_d);
+    let t_d1 = TimeData::new(0,48, 56,869);
+    let t_d2 = TimeData::new(0,48, 19,690);
+    let t_d3 = TimeData::new(0,49, 52,130);
     println!("{}", t_d1);
-    println!("{}", t_d1 + t_d1);
+    println!("{}", TimeData::from_ms(t_d1.to_ms()));
+    println!("{}", t_d1 - t_d2);
+    println!("{}", t_d3 - t_d1);
 }
 
 #[cfg(test)]

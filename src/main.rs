@@ -1,12 +1,15 @@
 mod time_data;
+mod eval_error;
 
 use time_data::TimeData;
+use eval_error::EvalError;
 
 fn main() {
-    let t_d = TimeData::default();
     let t_d1 = TimeData::new(0,48, 56,869);
     let t_d2 = TimeData::new(0,48, 19,690);
     let t_d3 = TimeData::new(0,49, 52,130);
+    println!("{}", EvalError::InvalidData);
+    println!("{}", EvalError::NegativeResult);
     println!("{}", t_d1);
     println!("{}", TimeData::from_ms(t_d1.to_ms()));
     println!("{}", t_d1 - t_d2);

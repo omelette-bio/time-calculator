@@ -1,13 +1,36 @@
 mod time_data;
+mod eval_error;
+mod symbol_table;
+mod operations;
+mod parsing;
 
-use time_data::TimeData;
+use std::io;
+use std::io::{BufRead, Write};
+use symbol_table::SymbolTable;
+use crate::parsing::parse;
+
+fn prompt() {
+    print!("time calculator # ");
+    io::stdout().flush().unwrap();
+}
 
 fn main() {
-    let t_d = TimeData::default();
-    let t_d1 = TimeData::new(0,1,31,99);
-    println!("{}", t_d);
-    println!("{}", t_d1);
-    println!("{}", t_d1 + t_d1);
+    prompt();
+    
+    let mut st = SymbolTable::default();
+    let stdin = io::stdin().lock();
+    for line in stdin.lines() {
+        let line = line.unwrap();
+        match parse::parse_input(&line).interp(&mut st) {
+            Ok(res) => {
+                if let Some(td) = res { println!("{}", td) }
+            }
+            Err(e) => {
+                println!("{}", e);
+            }
+        }
+        prompt();
+    }
 }
 
 #[cfg(test)]

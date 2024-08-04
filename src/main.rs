@@ -4,39 +4,33 @@ mod symbol_table;
 mod operations;
 mod parsing;
 
-use time_data::TimeData;
-use eval_error::EvalError;
+use std::io;
+use std::io::{BufRead, Write};
 use symbol_table::SymbolTable;
 use crate::parsing::parse;
 
+fn prompt() {
+    print!("time calculator # ");
+    io::stdout().flush().unwrap();
+}
+
 fn main() {
-    let t_d1 = TimeData::new(0,45,32,461);
-    let t_d2 = TimeData::new(0,48,19,690);
-    let t_d3 = TimeData::new(0,43,39,632);
+    prompt();
     
-    let mut c = SymbolTable::new();
-    c.attribute_value("X".to_string(), t_d1);
-    
-    let res = c.read_variable("X".to_string());
-    let res2 = c.read_variable("C".to_string());
-
-    if let Err(m) = res { println!("{}", m);}
-    else { println!("{}", res.unwrap());}
-
-    if let Err(m) = res2 { println!("{}", m);}
-    else { println!("{}", res2.unwrap());}
-
-    println!("{}", EvalError::InvalidData);
-    println!("{}", EvalError::NegativeResult);
-    println!("{}", t_d1);
-    println!("{}", TimeData::from_ms(t_d1.to_ms()));
-    println!("{}", t_d2 - t_d1);
-    println!("{}", t_d2 - t_d3);
-
-    println!("{:?}", parse::parse("00:01:02.123"));
-    //parse::display_line_data("x = 00:00:01.123");
-    println!("{:?}", parse::parse("x + 00:00:01.123"));
-    println!("{:?}", parse::parse("x - 00:00:01.123"));
+    let mut st = SymbolTable::default();
+    let stdin = io::stdin().lock();
+    for line in stdin.lines() {
+        let line = line.unwrap();
+        match parse::parse_input(&line).interp(&mut st) {
+            Ok(res) => {
+                if let Some(td) = res { println!("{}", td) }
+            }
+            Err(e) => {
+                println!("{}", e);
+            }
+        }
+        prompt();
+    }
 }
 
 #[cfg(test)]

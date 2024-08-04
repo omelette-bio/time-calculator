@@ -12,7 +12,7 @@ pub struct TimeData {
 // implement Display trait
 impl fmt::Display for TimeData {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}:{:02}:{:02}.{:03}", self.hours, self.minutes, self.seconds, self.milliseconds)
+        write!(f, "{:02}:{:02}:{:02}.{:03}", self.hours, self.minutes, self.seconds, self.milliseconds)
     }
 }
 

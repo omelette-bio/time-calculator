@@ -1,10 +1,13 @@
 mod time_data;
 mod eval_error;
 mod symbol_table;
+mod operations;
+mod parsing;
 
 use time_data::TimeData;
 use eval_error::EvalError;
 use symbol_table::SymbolTable;
+use crate::parsing::parse;
 
 fn main() {
     let t_d1 = TimeData::new(0,45,32,461);
@@ -29,6 +32,11 @@ fn main() {
     println!("{}", TimeData::from_ms(t_d1.to_ms()));
     println!("{}", t_d2 - t_d1);
     println!("{}", t_d2 - t_d3);
+
+    println!("{:?}", parse::parse("00:01:02.123"));
+    //parse::display_line_data("x = 00:00:01.123");
+    println!("{:?}", parse::parse("x + 00:00:01.123"));
+    println!("{:?}", parse::parse("x - 00:00:01.123"));
 }
 
 #[cfg(test)]

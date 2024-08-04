@@ -2,9 +2,16 @@ WHITESPACE = _{ " " }
 
 hrs = { ('0'..'2' ~ '0'..'9') | ('0'..'9') }
 min = { ('0'..'5' ~ '0'..'9') | ('0'..'9') }
-ms = { ('0'..'9' ~ '0'..'9' ~ '0'..'9') | ('0'..'9' ~ '0'..'9') | ('0'..'9') }
+ms  = { ('0'..'9' ~ '0'..'9' ~ '0'..'9') | ('0'..'9' ~ '0'..'9') | ('0'..'9') }
 
 duration = { hrs ~ ":" ~ min ~ ":" ~ min ~ "." ~ ms }
 
-var_decl = { "let" ~ (('a'..'z')|('A'..'Z')|('0'..'9'))+ ~ "=" ~ duration }
+operations = { "+" | "-" }
+var_call   = { (('a'..'z') | ('A'..'Z') | ('0'..'9'))+ }
 
+value      = { duration | var_call }
+calculus  = { value ~ operations ~ value } 
+
+var_decl = { var_call ~ "=" ~ ( calculus | value ) }
+
+expression = { calculus | var_decl | value  }
